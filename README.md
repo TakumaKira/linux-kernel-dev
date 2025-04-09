@@ -44,13 +44,47 @@ Build the kernel
 make -j$(nproc)
 ```
 
-Testing with QEMU
-You can use QEMU within Docker or on your host system to boot and test your custom kernel:
-
-Install QEMU on your host (brew install qemu on macOS) or inside Docker.
-
-Run QEMU with your compiled kernel:
+Steps Using gbionescu/build-rootfs:
+Clone the repository:
 
 ```sh
-qemu-system-aarch64 -machine virt -cpu cortex-a72 -kernel arch/arm64/boot/Image -append "console=ttyAMA0" -nographic
+git clone https://github.com/gbionescu/build-rootfs.git
+cd build-rootfs
+```
+
+Run the script to generate a root filesystem:
+
+```sh
+./build-rootfs.sh ubuntu
+```
+
+Replace ubuntu with your desired distribution type (e.g., alpine, debian, etc.).
+
+This will create a sparse ext4 image (rootfs.ext4) containing the root filesystem.
+
+Rename or move the generated image:
+
+```sh
+mv rootfs.ext4 rootfs.img
+```
+
+You can now use this rootfs.img with QEMU.
+
+Install QEMU
+
+```sh
+brew install qemu
+``` 
+
+In /linux directory, run QEMU with your compiled kernel:
+
+```sh
+cd linux
+qemu-system-aarch64 \
+  -machine virt \
+  -cpu cortex-a72 \
+  -kernel arch/arm64/boot/Image \
+  -append "console=ttyAMA0 root=/dev/vda1" \
+  -drive file=rootfs.img,format=raw,if=virtio \
+  -nographic
 ```
