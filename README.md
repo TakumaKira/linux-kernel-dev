@@ -135,6 +135,8 @@ qemu-system-aarch64 \
 
 Now you can interact with the kernel built from the linux directory.
 
+If you want to exit QEMU, press `Ctrl+a` then `x`.
+
 ### Modify the kernel
 
 Try change the behavior of the kernel by editing the source code.
@@ -180,3 +182,5 @@ And search the modified kernel message in the QEMU output.
 dmesg | grep "Hello from the modified kernel"
 # [    0.000000] Hello from the modified kernel!
 ```
+
+If you want to exit QEMU, press `Ctrl+a` then `x`.
